@@ -30,26 +30,26 @@ public class Museum {
 	
 	
 	private static Integer dfs(Integer X, Integer Y, Integer M, Integer N, Museu[][] museu) {
-		museu[X][Y].setCor("CINZA");
+		museu[X][Y].setCor("GRAY");
 		Integer soma = 0;
 		for(int i = -1; i <=1; i +=2){
 	        if(Y+i >= 0 && Y+i < N){
 	            if(museu[Y+i][X].getLacuna().equals('*')) {
 	            	soma++;	
 	            }	
-	            else if(museu[Y+i][X].getLacuna().equals('.')  && museu[Y+i][X].getCor().equals("BRANCO")) {
+	            else if(museu[Y+i][X].getLacuna().equals('.')  && museu[Y+i][X].getCor().equals("WHITE")) {
 	            	soma += dfs(X,Y+i, M, N, museu);
 	            }    	
 	        }
 	        if(X+i >= 0 && X+i < M){
 	            if(museu[Y][X+i].getLacuna().equals('*'))
 	            	soma++;
-	            else if(museu[Y][X+i].getLacuna().equals('.') && museu[Y][X+i].getCor().equals("BRANCO"))
+	            else if(museu[Y][X+i].getLacuna().equals('.') && museu[Y][X+i].getCor().equals("WHITE"))
 	            	soma += dfs(X+i,Y, M, N, museu);
 	        }
 	       
 		}
-		museu[X][Y].setCor("PRETO");
+		museu[X][Y].setCor("BLACK");
 		 return soma;
 	}
 	
