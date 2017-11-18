@@ -69,7 +69,7 @@ public class Museum {
 			for(int j = 0; j < N; j++) {
 				Museu mus = new Museu(linha.substring(j, j+1), "WHITE");
 				museu[i][j] = mus;
-			}
+			} 
 		}
 		for(int i = 0; i < K; i++) {
 			sc = new Scanner(System.in);
