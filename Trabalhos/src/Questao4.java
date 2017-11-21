@@ -2,139 +2,100 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+public class Main {
 
-public class Questao4 {
-
-	public static Integer contador = 0;
 	
-	static class Museu{
-		private String lacuna;
+	static class Estacao{
+		private Integer estacao1;
+		private Integer estacaoLigada;
 		private String cor;
-			
-		public Museu(String lacuna, String cor) {
+		
+		public Estacao(Integer estacao1, String cor, Integer estacaoLigada) {
 			super();
-			this.lacuna = lacuna;
+			this.estacao1 = estacao1;
 			this.cor = cor;
+			this.estacaoLigada = estacaoLigada;
 		}
-		public String getLacuna() {
-			return lacuna;
-		}
-		public void setLacuna(String lacuna) {
-			this.lacuna = lacuna;
-		}
+
 		public String getCor() {
 			return cor;
 		}
+
 		public void setCor(String cor) {
 			this.cor = cor;
-		}		
-	}
-	
-	
-	
-	private static void verificaEixoY(Integer X, Integer Y, Museu[][] museu, Integer N, Integer M) {
-		museu[X][Y].setCor("GRAY");
-		while(museu[X][Y].getLacuna().equals(".")) {
-			if(Y-1 >= 0 &&
-					museu[X][Y-1].getCor().equals("WHITE")
-					&& museu[X][Y-1].getLacuna().equals("*")) {
-				museu[X][Y-1].setCor("BLACK");
-				contador++;
-			}
-			if(Y-1 >= 0 &&
-					museu[X][Y-1].getCor().equals("WHITE")
-					&& museu[X][Y-1].getLacuna().equals(".")) {
-				verificaEixoY(X, Y-1, museu, N, M);
-			}
-			if(Y+1 <= N &&
-					museu[X][Y+1].getCor().equals("WHITE")
-					&& museu[X][Y+1].getLacuna().equals("*")) {
-				museu[X][Y-1].setCor("BLACK");
-				contador++;
-			}
-			if(Y+1 <= N &&
-					museu[X][Y+1].getCor().equals("WHITE")
-					&& museu[X][Y+1].getLacuna().equals(".")) {
-				verificaEixoY(X, Y+1, museu, N, M);
-			}
-			verificaEixoX(X, Y, museu, M, N);
-			Y++;
 		}
-		museu[X][Y].setCor("BLACK");
-	}
-	
-	private static void verificaEixoX(Integer X, Integer Y, Museu[][] museu, Integer M, Integer N) {
-		museu[X][Y].setCor("GRAY");
-		while(museu[X][Y].getLacuna().equals(".")) {
-			if(X-1 >= 0 &&
-					museu[X-1][Y].getCor().equals("WHITE")
-					&& museu[X-1][Y].getLacuna().equals("*")) {
-				museu[X-1][Y].setCor("BLACK");
-				contador++;
-			}
-			if(X-1 >= 0 &&
-					museu[X-1][Y].getCor().equals("WHITE")
-					&& museu[X-1][Y].getLacuna().equals(".")) {
-				verificaEixoX(X-1, Y, museu, M, N);
-				verificaEixoY(X-1, Y, museu, N, N);
-			}
-			if(X+1 <= M &&
-					museu[X+1][Y].getCor().equals("WHITE")
-					&& museu[X+1][Y].getLacuna().equals("*")) {
-				museu[X+1][Y].setCor("BLACK");
-				contador++;
-			}
-			if(X+1 <= M &&
-					museu[X+1][Y].getCor().equals("WHITE")
-					&& museu[X+1][Y].getLacuna().equals(".")) {
-				verificaEixoX(X+1, Y, museu, M, N);
-				verificaEixoY(X-1, Y, museu, N, N);
-			}
-			X++;
+		
+		public Integer getEstacao1() {
+			return estacao1;
 		}
-		museu[X][Y].setCor("BLACK");
+		public void setEstacao1(Integer estacao1) {
+			this.estacao1 = estacao1;
+		}
+
+		public Integer getEstacaoLigada() {
+			return estacaoLigada;
+		}
+
+		public void setEstacaoLigada(Integer estacaoLigada) {
+			this.estacaoLigada = estacaoLigada;
+		}
+			
+	}
+		
+	
+	private static Boolean estacaoConectada(List<Estacao> estacoes, Integer estacao){
+		for (int i = 0; i < estacao; i++) {
+			if(estacoes.get(i).getCor() == "BRANCO") {
+				return false;
+			}
+		}
+		return true;
 	}
 	
+	public static void buscaEmProfundidade(List<Estacao> estacoes, Integer totalEstacao, Integer estacaoVerificar) {
+		estacoes.get(estacaoVerificar).setCor("CINZA");
+		for(int i = 0; i < totalEstacao; i++) {
+			if(estacoes.get(i).getCor().equals("BRANCO")
+					&& estacoes.get(estacaoVerificar).getEstacaoLigada().equals(estacoes.get(i).getEstacao1())){
+				buscaEmProfundidade(estacoes, totalEstacao, i);
+			}
+		}
+	}
 	
 	
 	public static void main(String[] args) {
 		
-		Integer M, N, K, X = 0, Y = 0;
-		List<Integer> qntVisualizacoes = new ArrayList<Integer>();
-		Scanner sc = new Scanner(System.in);
-		M = sc.nextInt();
-		N = sc.nextInt();
-		K = sc.nextInt();
-		Museu[][] museu = new Museu[M][N];
-		for(int i = 0; i < M; i++){
-			sc = new Scanner(System.in);
-			String linha = sc.nextLine();
-			for(int j = 0; j < N; j++) {
-				Museu mus = new Museu(linha.substring(j, j+1), "WHITE");
-				museu[i][j] = mus;
-			}
-		}
-		for(int i = 0; i < K; i++) {
-			sc = new Scanner(System.in);
-			X = sc.nextInt();
-			Y = sc.nextInt();
-			verificaEixoY(X-1, Y-1, museu, N, M);
-			qntVisualizacoes.add(contador);
-			for(int k = 0; k < M; k++){
-				for(int u = 0; u < N; u++) {
-					museu[k][u].setCor("WHITE");;
+			Integer E, L, C1 = 0, C2 =0, j = 1;
+			Scanner sc = new Scanner(System.in);
+			List<Estacao> listaEstacoes = new ArrayList<Estacao>();
+			do {
+				
+				E = sc.nextInt();
+				L = sc.nextInt();
+				if((E == 0) && (L == 0)) {
+					return;
 				}
-			}
-			contador = 0;
-		}
-		sc.close();
-		for (Integer vis : qntVisualizacoes) {
-			System.out.println(vis);
-		}	
-		
-}
-		
-	
+				for(int i = 1; i <= L; i++){
+						C1 = sc.nextInt();
+						C2 = sc.nextInt();
+						listaEstacoes.add(new Estacao(C1, "BRANCO", C2));
+				}
+				buscaEmProfundidade(listaEstacoes, L, 0);
+				if(estacaoConectada(listaEstacoes, L)){
+					System.out.println("Teste "+j);
+					System.out.println("normal");
+					System.out.println("");
+				}else {
+					System.out.println("Teste "+j);
+					System.out.println("falha");
+					System.out.println("");
+				}
+				listaEstacoes = new ArrayList<Estacao>();
+				j++;
+			}while(!E.equals(0) && !L.equals(0));
+			sc.close();
+			System.exit(0);
+	}
 	
 	
 }
